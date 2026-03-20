@@ -78,6 +78,7 @@ restartButton.addEventListener("click", restartQuiz);
 function startQuiz() {
   //   reset variables
   currentQuestionIndex = 0;
+  score = 0;
   scoreSpan.textContent = 0;
 
   startScreen.classList.remove("active");
@@ -126,7 +127,7 @@ function selectAnswer(event) {
   Array.from(answersContainer.children).forEach((button) => {
     if (button.dataset.correct === "true") {
       button.classList.add("correct");
-    } else {
+    } else if (button === selectButtton) {
       button.classList.add("incorrect");
     }
   });
@@ -143,7 +144,7 @@ function selectAnswer(event) {
     if (currentQuestionIndex < quizQuestions.length) {
       showQuestion();
     } else {
-      shoeResult();
+      showResult();
     }
   }, 1000);
 }
@@ -153,8 +154,24 @@ function showResult() {
   resultScreen.classList.add("active");
 
   finalScoreSpan.textContent = score;
+
+  const percentage = (score / quizQuestions.length) * 100;
+
+  if (percentage === 100) {
+    resultMessage.textContent = "Perfect! You're a genius!";
+  } else if (percentage >= 80) {
+    resultMessage.textContent = "Great Job! You know your stuff!";
+  } else if (percentage >= 60) {
+    resultMessage.textContent = "Good effort! Keep learning!";
+  } else if (percentage >= 40) {
+    resultMessage.textContent = "Not bad! Try again to improve!";
+  } else {
+    resultMessage.textContent = "Keep studying! You'll get better!";
+  }
 }
 
 function restartQuiz() {
-  console.log("quiz re-started");
+  resultScreen.classList.remove("active");
+
+  startQuiz();
 }
